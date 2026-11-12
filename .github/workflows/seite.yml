@@ -1,0 +1,59 @@
+# Baut die Webseite auf GitHub, setzt die persönlichen Angaben aus den Repository-Secrets ein und
+# veröffentlicht sie über GitHub Pages. Im Repo stehen nur Platzhalter.
+# Fehlt ein Pflicht-Secret oder bleibt ein Platzhalter übrig, bricht "bauen" ab; dann läuft
+# "veroeffentlichen" nicht, und die bisherige Seite bleibt online.
+# Nur offizielle Actions von GitHub, jede auf eine feste Commit-SHA festgelegt (werkzeuge/pruefen.py prüft das).
+name: Webseite
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  bauen:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Seiten bauen und prüfen
+        env:
+          # Stufe 1, Pflicht
+          PRIVAT_NAME: ${{ secrets.PRIVAT_NAME }}
+          PRIVAT_WOHNORT: ${{ secrets.PRIVAT_WOHNORT }}
+          PRIVAT_EMAIL: ${{ secrets.PRIVAT_EMAIL }}
+          # Stufe 2, optional: ein fehlendes Secret lässt seinen Block im Impressum weg
+          PRIVAT_ANSCHRIFT: ${{ secrets.PRIVAT_ANSCHRIFT }}
+          PRIVAT_GEWERBE: ${{ secrets.PRIVAT_GEWERBE }}
+          PRIVAT_BEHOERDE: ${{ secrets.PRIVAT_BEHOERDE }}
+          PRIVAT_KAMMER: ${{ secrets.PRIVAT_KAMMER }}
+          PRIVAT_UST_ID: ${{ secrets.PRIVAT_UST_ID }}
+        run: |
+          python3 werkzeuge/bauen.py --werte-aus-umgebung --aus "$RUNNER_TEMP/seite"
+          python3 werkzeuge/pruefen.py --nur-seiten "$RUNNER_TEMP/seite"
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: ${{ runner.temp }}/seite
+
+  veroeffentlichen:
+    needs: bauen
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.seite.outputs.page_url }}
+    steps:
+      - id: seite
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

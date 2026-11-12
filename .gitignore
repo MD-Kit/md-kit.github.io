@@ -1,0 +1,10 @@
+# Nichts davon gehört in das öffentliche Repo (der pre-commit-Haken lässt ohnehin nur
+# quellen/, vorlage/, werkzeuge/, .github/workflows/ und .gitignore zu).
+__pycache__/
+*.pyc
+*.png
+*.jpg
+*.log
+.claude/
+CLAUDE.md
+.bau_kennung

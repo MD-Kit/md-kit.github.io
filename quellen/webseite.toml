@@ -1,0 +1,28 @@
+# Die eine Stelle für Studio-Name, Adresse und Spiele. Ein neuer Name: nur hier ändern
+# (und, falls die Adresse wechselt, das Repo umbenennen). Texte nutzen [STUDIO], [WEBSEITE], [SPIEL].
+
+[studio]
+name = "MDKit"
+url = "https://md-kit.github.io"
+text_de = "[STUDIO] entwickelt kleine Spiele für Android."
+text_en = "[STUDIO] makes small games for Android."
+
+[admob]
+# Publisher-ID aus AdMob (Form pub-0000000000000000). Bis sie eingetragen ist, bricht der Bau ab.
+publisher_id = "[PUBLISHER_ID]"
+
+# Persönliche Angaben: stehen nie im Repo. Lokal aus einer Wertedatei außerhalb des Repos,
+# auf GitHub aus den Repository-Secrets PRIVAT_<KEY>.
+[persoenlich]
+# Stufe 1 (jetzt): ohne diese bricht der Bau ab.
+pflicht = ["NAME", "WOHNORT", "EMAIL"]
+# Stufe 2 (ab 2027): nur in "::: wenn KEY"-Blöcken; fehlt das Secret, fällt der Block weg.
+optional = ["ANSCHRIFT", "GEWERBE", "BEHOERDE", "KAMMER", "UST_ID"]
+
+# Je Spiel ein Ordner quellen/<ordner>/ mit datenschutz.md, privacy.md, nutzungsbedingungen.md, terms.md.
+# Adressen: /<ordner>/datenschutz/, /<ordner>/privacy/, /<ordner>/nutzungsbedingungen/, /<ordner>/terms/
+[[spiel]]
+ordner = "golden-pieces"
+name = "Golden Pieces"
+text_de = "Ein ruhiges Puzzlespiel."
+text_en = "A calm jigsaw puzzle game."
