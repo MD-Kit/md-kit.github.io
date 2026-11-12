@@ -14,7 +14,7 @@ Geprüft wird:
   4. Farben: jedes Text/Grund-Paar aus site.css mindestens 4,5 : 1.
   5. Browser: jede Seite (und eine unbekannte Adresse für die 404-Seite) lokal von 127.0.0.1 laden,
      jede Anfrage zählen -- eine einzige nach außen ist ROT; kein waagrechtes Scrollen am Handy;
-     Handy-Fotos (390 x 844, Faktor 3, ganze Seite) in --fotos.
+     Handy-Fotos (390 x 844, Faktor 3, ganze Seite; lange Seiten in Teilen _1, _2, ...) in --fotos.
 Gibt nie einen persönlichen Wert aus.
 """
 import argparse
@@ -314,7 +314,9 @@ def pruefe_browser(aus, e, fotos, browser):
 	basis = f"http://127.0.0.1:{server.server_address[1]}"
 	try:
 		r = subprocess.run([node, str(Path(__file__).with_name("pruefen_browser.mjs")), exe, basis, str(fotos), *seiten],
-			capture_output=True, text=True, encoding="utf-8", timeout=300)
+			capture_output=True, text=True, encoding="utf-8", timeout=600)
+	except subprocess.TimeoutExpired:
+		return ["Browser-Messung nach 600 s abgebrochen"], ""
 	finally:
 		server.shutdown()
 	if r.returncode != 0:
@@ -335,7 +337,7 @@ def pruefe_browser(aus, e, fotos, browser):
 		if d["breite"][0] > d["breite"][1]:
 			p.append(f"{d['pfad']}: waagrechtes Scrollen am Handy ({d['breite'][0]} > {d['breite'][1]} px)")
 	zus = (f"{len(daten)} Seiten, {gesamt} Anfragen, davon {aussen} nach außen; "
-		f"Handy-Fotos: {len(daten)} in {fotos.name}")
+		f"Handy-Fotos: {sum(len(d['fotos']) for d in daten)} in {fotos.name}")
 	return p, zus
 
 

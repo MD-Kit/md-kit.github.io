@@ -98,3 +98,9 @@ li { margin: 0.3rem 0; }
 	color: var(--tinte-leise);
 }
 .fuss a { color: var(--tinte-leise); display: inline-block; padding: 0.35rem 0.15rem; }
+/* Schmale Bildschirme: Links untereinander, ohne Trennpunkte am Zeilenende. */
+@media (max-width: 30rem) {
+	.fuss nav { display: flex; flex-direction: column; align-items: center; }
+	.fuss nav span { display: none; }  /* die Trennpunkte (aria-hidden) */
+	.fuss nav a { display: flex; align-items: center; min-height: 44px; padding: 0 0.5rem; }
+}
