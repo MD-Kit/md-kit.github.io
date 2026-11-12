@@ -9,7 +9,7 @@ text_en = "[STUDIO] makes small games for Android."
 
 [admob]
 # Publisher-ID aus AdMob (Form pub-0000000000000000). Bis sie eingetragen ist, bricht der Bau ab.
-publisher_id = "[PUBLISHER_ID]"
+publisher_id = "pub-3753465369906415"
 
 # Persönliche Angaben: stehen nie im Repo. Lokal aus einer Wertedatei außerhalb des Repos,
 # auf GitHub aus den Repository-Secrets PRIVAT_<KEY>.
